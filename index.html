@@ -1,777 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#1877f2">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Campus Connect">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" href="/icons/icon-192.png" />
-  <link rel="apple-touch-icon" href="/icons/icon-192.png">
-  <link rel="manifest" href="/manifest.json">
-  <title>Campus Connect</title>
-
-  <style>
-    :root {
-      --blue: #1877f2;
-      --background: #f0f2f5;
-      --surface: #ffffff;
-      --text: #1c1e21;
-      --muted: #65676b;
-      --border: #dddfe2;
-    }
-
-    body.dark {
-      --background: #18191a;
-      --surface: #242526;
-      --text: #e4e6eb;
-      --muted: #b0b3b8;
-      --border: #3e4042;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
-      background: var(--background);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 5%;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-    }
-
-    header h1 {
-      margin: 0;
-      color: var(--blue);
-      font-size: 23px;
-    }
-
-    button, input, textarea {
-      font: inherit;
-    }
-
-    .language-selector {
-      max-width: 150px;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      background: var(--background);
-      color: var(--text);
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      border-radius: 7px;
-      padding: 10px 14px;
-      background: var(--blue);
-      color: white;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    .secondary {
-      background: var(--background);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      background: var(--surface);
-      color: var(--text);
-      margin: 6px 0 12px;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 90px;
-    }
-
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .container {
-      width: min(700px, 94%);
-      margin: 22px auto;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-
-    .tabs button {
-      flex: 1;
-    }
-
-    .status {
-      white-space: pre-wrap;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    .auth-help {
-      margin: 8px 0 0;
-      font-size: 14px;
-    }
-
-    .auth-help button {
-      padding: 0;
-      border: 0;
-      background: transparent;
-      color: var(--blue);
-      text-decoration: underline;
-    }
-
-    .auth-help button:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
-
-    .error {
-      color: #e53935;
-    }
-
-    .success {
-      color: #16803c;
-    }
-
-    .stories-list {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      padding: 8px 2px 14px;
-    }
-
-    .story-card {
-      display: grid;
-      width: 86px;
-      flex: 0 0 86px;
-      justify-items: center;
-      gap: 7px;
-      padding: 0;
-      background: transparent;
-      color: var(--text);
-    }
-
-    .story-preview {
-      display: grid;
-      width: 72px;
-      height: 72px;
-      place-items: center;
-      overflow: hidden;
-      border: 3px solid #25d366;
-      border-radius: 50%;
-      background: #e8f7ef;
-      color: #128c54;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .story-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .story-label {
-      width: 100%;
-      overflow: hidden;
-      font-size: 12px;
-      text-align: center;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .story-viewer {
-      width: min(520px, 94vw);
-      max-height: 90vh;
-      padding: 20px;
-      border: 0;
-      border-radius: 16px;
-      background: var(--surface);
-      color: var(--text);
-    }
-
-    .story-viewer::backdrop {
-      background: rgb(0 0 0 / 75%);
-    }
-
-    .story-media {
-      display: block;
-      width: 100%;
-      max-height: 65vh;
-      margin: 12px 0;
-      border-radius: 12px;
-      object-fit: contain;
-    }
-
-    .story-viewer-actions {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .post-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .post-author {
-      font-weight: bold;
-    }
-
-    .post-content {
-      overflow-wrap: anywhere;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
-
-    .post-image, .post-video {
-      display: block;
-      max-width: 100%;
-      max-height: 450px;
-      margin-top: 12px;
-      border-radius: 8px;
-    }
-
-    .post-actions {
-      display: flex;
-      gap: 8px;
-      border-top: 1px solid var(--border);
-      padding-top: 12px;
-      margin-top: 12px;
-    }
-
-    .post-actions button {
-      flex: 1;
-    }
-
-    .comment {
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border);
-      overflow-wrap: anywhere;
-    }
-
-    .comment-form {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .comment-form input {
-      margin: 0;
-    }
-
-    .comment-form button {
-      white-space: nowrap;
-    }
-
-    .reaction-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .reaction-button {
-      padding: 7px 10px;
-      border: 1px solid #f1a3a8;
-      background: #fff0f1;
-      color: #d92d3a;
-    }
-
-    .reaction-button[aria-pressed="true"] {
-      border-color: #d92d3a;
-      background: #d92d3a;
-      color: #fff;
-    }
-
-    #profileAvatarPreview {
-      display: block;
-      width: 96px;
-      height: 96px;
-      margin: 10px 0;
-      border: 2px solid var(--border);
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .notification-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .notification-item {
-      padding: 12px;
-      border-radius: 12px;
-      background: var(--background);
-    }
-
-    .notification-item.unread {
-      border-left: 3px solid var(--blue);
-    }
-
-    .owner-about {
-      line-height: 1.6;
-    }
-
-    #profileDetails {
-      line-height: 1.7;
-    }
-
-    #profileDetails .profile-avatar {
-      width: 64px;
-      height: 64px;
-      margin-right: 10px;
-      border-radius: 50%;
-      object-fit: cover;
-      vertical-align: middle;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      z-index: 20;
-      left: 50%;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      width: min(560px, calc(100% - 24px));
-      min-height: 66px;
-      padding: 6px;
-      bottom: calc(12px + env(safe-area-inset-bottom));
-      transform: translateX(-50%);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--surface) 92%, transparent);
-      box-shadow: 0 8px 28px rgb(20 40 60 / 18%);
-      backdrop-filter: blur(18px);
-    }
-
-    .bottom-nav a {
-      display: flex;
-      min-width: 0;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 600;
-      text-decoration: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .bottom-nav a:hover,
-    .bottom-nav a.active {
-      color: #1877f2;
-    }
-
-    .bottom-nav svg {
-      width: 23px;
-      height: 23px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.9;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    /* Telegram-inspired blue surfaces and rounded controls. */
-    :root {
-      --blue: #3390ec;
-      --background: #eaf0f5;
-      --surface: #ffffff;
-      --text: #182533;
-      --muted: #71808d;
-      --border: #e1e8ee;
-    }
-
-    body.dark {
-      --blue: #5aa9f8;
-      --background: #0e1621;
-      --surface: #17212b;
-      --text: #edf4f8;
-      --muted: #91a2b2;
-      --border: #263442;
-    }
-
-    body {
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-      background-image: radial-gradient(rgb(89 130 160 / 5%) .75px, transparent .75px);
-      background-size: 18px 18px;
-    }
-
-    header {
-      padding: 13px max(16px, calc((100% - 1080px) / 2));
-      box-shadow: 0 2px 10px rgb(28 48 66 / 5%);
-    }
-
-    header h1 { letter-spacing: -.6px; }
-    header > div { flex-wrap: wrap; justify-content: flex-end; }
-    button { border-radius: 10px; transition: filter .16s ease, transform .16s ease; }
-    button:hover:not(:disabled) { filter: brightness(.97); }
-    .secondary, input, textarea { border-radius: 12px; }
-    input, textarea { padding: 13px 14px; }
-    input:focus, textarea:focus { border-color: var(--blue); outline: 3px solid rgb(51 144 236 / 14%); }
-    .container { width: min(720px, 94%); margin-top: 28px; }
-    .card { border-color: var(--border); border-radius: 16px; box-shadow: 0 4px 18px rgb(28 48 66 / 5%); }
-    #authSection { max-width: 580px; margin: 32px auto; padding: clamp(20px, 5vw, 38px); }
-    #authSection > h2 { margin-top: 0; font-size: clamp(24px, 4vw, 32px); letter-spacing: -.8px; }
-    #loginForm h3, #registerForm h3 { margin-top: 22px; }
-    .tabs { padding: 4px; border-radius: 12px; background: var(--background); }
-    .tabs button { border-radius: 9px; }
-    .tabs button.secondary { border-color: transparent; background: transparent; }
-    .tabs button:not(.secondary) { box-shadow: 0 2px 6px rgb(28 48 66 / 12%); }
-    .story-preview { border-color: var(--blue); background: #eaf4ff; color: #2582d8; }
-    .story-card { border-radius: 12px; }
-    .story-card:hover { background: color-mix(in srgb, var(--blue) 7%, var(--surface)); }
-    .post-actions { border-top-color: var(--border); }
-    .bottom-nav { backdrop-filter: blur(14px); background: color-mix(in srgb, var(--surface) 94%, transparent); }
-    .bottom-nav a { transition: background-color .16s ease, color .16s ease, transform .16s ease; }
-    .bottom-nav a.active { background: color-mix(in srgb, var(--blue) 12%, var(--surface)); }
-
-    @media (max-width: 480px) {
-      body { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
-      header {
-        padding: 12px;
-      }
-
-      header h1 {
-        font-size: 19px;
-      }
-      header > div { gap: 5px !important; }
-      header > div > a, header > div > button { padding: 8px 9px !important; font-size: 12px; }
-
-      .container {
-        width: 96%;
-      }
-
-      .card {
-        padding: 13px;
-      }
-
-      #authSection { margin: 18px auto; }
-    }
-  </style>
-  <script type="module" crossorigin src="/assets/main-OBWhUUT0.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/pwa-0k7TgQP9.js">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 browser-agent - Your AI Assistant for Chrome</title>
+    <meta name="description" content="browser-agent is a free AI agent in Chrome's side panel that reads and works on your tab. Bring your own AI key (Claude, OpenAI, Gemini) or use local models (Ollama, LM Studio). No server needed, MIT licensed.">
+    <meta name="keywords" content="ai-agent, anthropic, browser-agent, browser-automation, chrome-extension, llm, local-llm, ollama, openai, side-panel, chrome AI assistant, AI browser tool, free AI extension">
+    <meta name="author" content="guycrespin">
+    <meta property="og:title" content="🤖 browser-agent - Your AI Assistant for Chrome">
+    <meta property="og:description" content="An AI agent in Chrome's side panel that reads and works on your tab. Bring your own key or use local models. No server, MIT licensed.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/guycrespin/browser-agent">
 </head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #2d3748; line-height: 1.7;">
 
-<body>
-  <header>
-    <h1>Campus Connect</h1>
-    <div style="display:flex; gap:8px;">
-      <label for="language-selector" hidden>Language</label>
-      <select id="language-selector" class="language-selector" aria-label="Language" data-i18n-aria-label="Language">
-        <option value="en">English</option>
-        <option value="fr">Français</option>
-        <option value="sw">Kiswahili</option>
-        <option value="es">Español</option>
-      </select>
-      <button id="install-app-button" class="secondary" type="button" data-install-app data-i18n="Install app">Install app</button>
-      <a href="/messages.html" class="secondary"
-         style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;" data-i18n="💬 Messages">
-        💬 Messages
-      </a>
-      <a href="#about" class="secondary"
-         style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;text-decoration:none;color:inherit;" data-i18n="About">
-        About
-      </a>
-      <button id="themeButton" class="secondary" type="button" data-i18n="🌙 Theme">🌙 Theme</button>
-      <button id="logoutButton" class="hidden" type="button" data-i18n="Log out">Log out</button>
+<div style="max-width: 900px; margin: 0 auto; padding: 40px 20px;">
+
+    <!-- Header Section -->
+    <div style="text-align: center; padding: 40px 20px 30px 20px; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin-bottom: 40px;">
+        <h1 style="font-size: 3em; margin: 0 0 10px 0; color: #1a202c; letter-spacing: -0.5px;">
+            <span style="display: inline-block; animation: bounce 2s infinite;">🤖</span> browser-agent
+        </h1>
+        <p style="font-size: 1.3em; margin: 0 0 20px 0; color: #4a5568; font-weight: 500;">Your AI Helper That Reads Your Tab</p>
+        
+        <div style="margin-top: 25px;">
+            <a href="https://github.com/guycrespin/browser-agent" style="display: inline-block; padding: 16px 45px; background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); color: white; font-size: 1.3em; font-weight: bold; text-decoration: none; border-radius: 50px; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); transition: transform 0.2s ease;">🚀 Download Now - It's Free!</a>
+        </div>
+        
+        <p style="margin-top: 15px; color: #718096; font-size: 0.9em;">MIT Licensed • Open Source • No Server Required</p>
     </div>
-  </header>
 
-  <main class="container">
-
-    <!-- AUTHENTICATION -->
-    <section id="authSection" class="card">
-      <h2 data-i18n="Welcome to Campus Connect 🎓">Welcome to Campus Connect 🎓</h2>
-      <p class="muted" data-i18n="Connect with people, wherever they study or work.">Connect with people, wherever they study or work.</p>
-
-      <div class="tabs">
-        <button id="showLoginButton" type="button" data-i18n="Log in">Log in</button>
-        <button id="showRegisterButton" class="secondary" type="button" data-i18n="Register">
-          Register
-        </button>
-      </div>
-
-      <form id="loginForm">
-        <h3 data-i18n="Log in to your account">Log in to your account</h3>
-
-        <label for="loginMethod" data-i18n="Sign-in method">Sign-in method</label>
-        <select id="loginMethod">
-          <option value="email" data-i18n="Email and password">Email and password</option>
-          <option value="phone" data-i18n="Phone number and SMS code">Phone number and SMS code</option>
-        </select>
-
-        <div id="emailLoginFields">
-          <label for="loginEmail" data-i18n="Email">Email</label>
-          <input id="loginEmail" type="email" autocomplete="email" required>
-          <label for="loginPassword" data-i18n="Password">Password</label>
-          <input id="loginPassword" type="password" autocomplete="current-password" required>
-        </div>
-        <div id="phoneLoginFields" class="hidden">
-          <label for="loginPhone" data-i18n="Phone number">Phone number</label>
-          <input id="loginPhone" type="tel" autocomplete="tel" inputmode="tel"
-                 placeholder="+12025550123" pattern="^\+[1-9]\d{7,14}$">
-          <p class="muted" data-i18n="Use international format, including the + country code.">Use international format, including the + country code.</p>
-        </div>
-
-        <button id="loginSubmitButton" type="submit" data-i18n="Log in">Log in</button>
-        <p id="loginStatus" class="status" role="status"></p>
-        <p class="auth-help">
-          <button id="forgotPasswordButton" type="button" data-i18n="Forgot your password?">Forgot your password?</button>
-        </p>
-        <p class="auth-help hidden" id="resendConfirmation">
-          <button id="resendConfirmationButton" type="button" data-i18n="Resend confirmation email">Resend confirmation email</button>
-        </p>
-      </form>
-      <form id="phoneLoginVerifyForm" class="hidden">
-        <h3 data-i18n="Verify your phone">Verify your phone</h3>
-        <p data-i18n="Enter the SMS verification code sent to your phone.">Enter the SMS verification code sent to your phone.</p>
-        <label for="phoneLoginCode" data-i18n="SMS verification code">SMS verification code</label>
-        <input id="phoneLoginCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" required>
-        <button type="submit" data-i18n="Verify and log in">Verify and log in</button>
-        <button id="resendPhoneLoginCode" class="secondary" type="button" data-i18n="Resend SMS code">Resend SMS code</button>
-        <p id="phoneLoginStatus" class="status" role="status"></p>
-      </form>
-
-      <form id="registerForm" class="hidden">
-        <h3 data-i18n="Create your account">Create your account</h3>
-        <label for="registerMethod" data-i18n="Registration method">Registration method</label>
-        <select id="registerMethod">
-          <option value="email" data-i18n="Email and password">Email and password</option>
-          <option value="phone" data-i18n="Phone number and SMS code">Phone number and SMS code</option>
-        </select>
-
-        <label for="registerName" data-i18n="Full name">Full name</label>
-        <input id="registerName" type="text" maxlength="80"
-               autocomplete="name" required>
-
-        <label for="registerUsername" data-i18n="Username">Username</label>
-        <input id="registerUsername" type="text" minlength="3" maxlength="30"
-               pattern="[A-Za-z0-9_]{3,30}"
-               title="Use 3 to 30 letters, numbers and underscores."
-               required>
-
-        <div id="emailRegistrationFields">
-          <label for="registerEmail" data-i18n="Email">Email</label>
-          <input id="registerEmail" type="email" autocomplete="email" required>
-          <p class="muted" data-i18n="Any valid email address is welcome; no school email is required.">Any valid email address is welcome; no school email is required.</p>
-        </div>
-        <div id="phoneRegistrationFields" class="hidden">
-          <label for="registerPhone" data-i18n="Phone number">Phone number</label>
-          <input id="registerPhone" type="tel" autocomplete="tel" inputmode="tel"
-                 placeholder="+12025550123" pattern="^\+[1-9]\d{7,14}$">
-          <p class="muted" data-i18n="Use international format, including the + country code.">Use international format, including the + country code.</p>
-        </div>
-
-        <label for="registerCourse" data-i18n="University, school, course, or organization (optional)">University, school, course, or organization (optional)</label>
-        <input id="registerCourse" type="text" maxlength="100">
-
-        <div id="registrationPasswordField">
-          <label for="registerPassword" data-i18n="Password (at least 6 characters)">Password (at least 6 characters)</label>
-          <input id="registerPassword" type="password" minlength="6" autocomplete="new-password" required>
-          <p class="muted" data-i18n="Use at least 6 characters. Use an email address you can open to confirm your account if asked.">Use at least 6 characters. Use an email address you can open to confirm your account if asked.</p>
-        </div>
-
-        <button type="submit" data-i18n="Create account">Create account</button>
-        <p id="registerStatus" class="status" role="status"></p>
-      </form>
-      <form id="phoneRegistrationVerifyForm" class="hidden">
-        <h3 data-i18n="Verify your phone">Verify your phone</h3>
-        <p data-i18n="Enter the SMS verification code sent to your phone.">Enter the SMS verification code sent to your phone.</p>
-        <label for="phoneRegistrationCode" data-i18n="SMS verification code">SMS verification code</label>
-        <input id="phoneRegistrationCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" required>
-        <button type="submit" data-i18n="Verify and create account">Verify and create account</button>
-        <button id="resendPhoneRegistrationCode" class="secondary" type="button" data-i18n="Resend SMS code">Resend SMS code</button>
-        <p id="phoneRegistrationStatus" class="status" role="status"></p>
-      </form>
-    </section>
-
-    <!-- APPLICATION -->
-    <section id="appSection" class="hidden">
-      <section id="profile" class="card">
-        <h2 data-i18n="Your profile">Your profile</h2>
-        <div id="profileDetails" data-i18n="Loading your profile...">Loading your profile...</div>
-        <form id="profileForm">
-          <label for="profileAvatarFile" data-i18n="Profile picture">Profile picture</label>
-          <img id="profileAvatarPreview" alt="Profile picture preview" hidden>
-          <input id="profileAvatarFile" type="file" accept="image/*">
-          <label for="profileName" data-i18n="Display name">Display name</label>
-          <input id="profileName" type="text" maxlength="100" required>
-          <label for="profileBio" data-i18n="About you">About you</label>
-          <textarea id="profileBio" maxlength="500" placeholder="A little about you..." data-i18n-placeholder="A little about you..."></textarea>
-          <label for="profileCourse" data-i18n="University, school, course, or organization">University, school, course, or organization</label>
-          <input id="profileCourse" type="text" maxlength="120">
-          <button id="saveProfileButton" type="submit" data-i18n="Save profile">Save profile</button>
-        </form>
-        <p id="profileStatus" class="status" role="status"></p>
-      </section>
-
-      <section id="notifications" class="card">
-        <h2><span data-i18n="Notifications">Notifications</span> <span id="notificationCount" class="muted"></span></h2>
-        <button id="refreshNotificationsButton" class="secondary" type="button" data-i18n="Refresh notifications">Refresh notifications</button>
-        <button id="markNotificationsReadButton" class="secondary" type="button" data-i18n="Mark all as read">Mark all as read</button>
-        <div id="notificationList" class="notification-list" aria-live="polite"></div>
-        <p id="notificationStatus" class="status" role="status"></p>
-      </section>
-
-      <section id="stories" class="card">
-        <h2 data-i18n="Student status">Student status</h2>
-        <p class="muted" data-i18n="Share a text, photo, or video status. Statuses disappear after 24 hours.">Share a text, photo, or video status. Statuses disappear after 24 hours.</p>
-        <button id="refreshStoriesButton" class="secondary" type="button" data-i18n="Refresh statuses">Refresh statuses</button>
-        <form id="storyForm">
-          <label for="storyText" data-i18n="Your status">Your status</label>
-          <textarea id="storyText" maxlength="500" placeholder="What are you up to?" data-i18n-placeholder="What are you up to?"></textarea>
-          <label for="storyMedia" data-i18n="Add a photo or video (optional)">Add a photo or video (optional)</label>
-          <input id="storyMedia" type="file" accept="image/*,video/*">
-          <p class="muted">Videos can be up to 10 minutes and 500 MiB. Photos can be up to 50 MiB.</p>
-          <button id="publishStoryButton" type="submit" data-i18n="Share status">Share status</button>
-          <p id="storyStatus" class="status" role="status"></p>
-        </form>
-        <div id="storiesList" class="stories-list" aria-label="Student statuses"></div>
-      </section>
-
-      <section class="card">
-        <h2 data-i18n="Create a post">Create a post</h2>
-        <form id="postForm">
-          <label for="postText" data-i18n="What's happening on campus?">What's happening on campus?</label>
-          <textarea id="postText" maxlength="5000"
-                    placeholder="Share something with your classmates..." data-i18n-placeholder="Share something with your classmates..."></textarea>
-
-          <label for="mediaUpload" data-i18n="Add a picture or video (optional)">Add a picture or video (optional)</label>
-          <input id="mediaUpload" type="file"
-                 accept="image/*,video/*">
-
-          <p class="muted">
-            Videos can be up to 10 minutes and 500 MiB; pictures can be up to 50 MiB.
-            Uploaded media is publicly viewable, so only share files you are comfortable making public.
-          </p>
-
-          <button id="publishButton" type="submit">Publish post</button>
-          <p id="postStatus" class="status" role="status"></p>
-        </form>
-      </section>
-
-      <section class="card">
-        <h2>Student feed</h2>
-        <button id="refreshFeedButton" class="secondary" type="button">
-          Refresh feed
-        </button>
-        <p id="feedStatus" class="status" role="status"></p>
-        <div id="feed"></div>
-      </section>
-    </section>
-
-    <section id="about" class="card owner-about">
-      <h2>About Campus Connect</h2>
-      <p>Campus Connect is a community app for sharing updates, photos and videos, discovering people, and keeping in touch through private or community chats and calls.</p>
-      <p><strong>App owner:</strong> Josh Chimal...Akim</p>
-    </section>
-
-  </main>
-
-  <nav class="bottom-nav" aria-label="Main navigation">
-    <a href="/messages.html" data-destination="chats">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.8-3.2A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8 11.5h8M8 14.5h5"/></svg>
-      <span>Chats</span>
-    </a>
-    <a href="/messages.html#calls" data-destination="calls">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.5 10 7.2 8.4 9.5a15 15 0 0 0 6.1 6.1l2.3-1.6 3.7 2.8-.8 3.3a2 2 0 0 1-2.1 1.5A17.5 17.5 0 0 1 2.4 6.1a2 2 0 0 1 1.5-2.1l3.3-.5Z"/></svg>
-      <span>Calls</span>
-    </a>
-    <a href="/#stories" data-destination="updates">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.8"/><circle cx="12" cy="12" r="2.5"/></svg>
-      <span>Updates</span>
-    </a>
-    <a href="/#profile" data-destination="profile">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
-      <span>Profile</span>
-    </a>
-  </nav>
-
-  <dialog id="storyViewer" class="story-viewer" aria-label="Student status">
-    <div id="storyViewerContent"></div>
-    <div class="story-viewer-actions">
-      <button id="previousStoryButton" class="secondary" type="button">Previous</button>
-      <button id="closeStoryButton" type="button">Close</button>
-      <button id="nextStoryButton" class="secondary" type="button">Next</button>
+    <!-- What is it Section -->
+    <div style="background: white; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); padding: 35px 40px; margin-bottom: 30px;">
+        <h2 style="color: #1a202c; font-size: 1.8em; margin-top: 0; border-bottom: 3px solid #667eea; padding-bottom: 10px;">🎯 What Is browser-agent?</h2>
+        <p style="font-size: 1.1em;">browser-agent is a smart assistant that lives right inside your Chrome browser. Think of it as having a helpful friend in a side panel that can see what you're looking at and help you with it.</p>
+        <ul style="list-style-type: none; padding: 0;">
+            <li style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">💬 <strong>Reads your tab</strong> - understands the content you're viewing</li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">⚡ <strong>Works alongside you</strong> - takes actions in your browser</li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">🔒 <strong>Your data stays yours</strong> - no cloud server involved</li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">🔓 <strong>Completely free</strong> - open source under MIT license</li>
+        </ul>
     </div>
-  </dialog>
 
-  <dialog id="passwordResetDialog" class="story-viewer" aria-labelledby="passwordResetTitle">
-    <h2 id="passwordResetTitle">Reset your password</h2>
-    <p class="muted">We’ll email you a secure link to choose a new password.</p>
-    <form id="passwordResetForm">
-      <label for="resetEmail">Email</label>
-      <input id="resetEmail" type="email" autocomplete="email" required>
-      <button id="sendResetButton" type="submit">Send reset link</button>
-      <button id="closeResetDialogButton" class="secondary" type="button">Cancel</button>
-      <p id="resetStatus" class="status" role="status"></p>
-    </form>
-  </dialog>
+    <!-- Features Section -->
+    <div style="background: white; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); padding: 35px 40px; margin-bottom: 30px;">
+        <h2 style="color: #1a202c; font-size: 1.8em; margin-top: 0; border-bottom: 3px solid #667eea; padding-bottom: 10px;">✨ Amazing Features</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea;">
+                <h3 style="margin: 0 0 10px 0; color: #2d3748; font-size: 1.2em;">🤝 Works With Your AI Provider</h3>
+                <p style="margin: 0; color: #4a5568;">Bring your own key from Claude, OpenAI, Gemini, or OpenRouter. No subscription to us - you use what you already have!</p>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px; border-left: 4px solid #48bb78;">
+                <h3 style="margin: 0 0 10px 0; color: #2d3748; font-size: 1.2em;">🏠 Run Locally With Ollama or LM Studio</h3>
+                <p style="margin: 0; color: #4a5568;">Prefer local models? browser-agent connects to Ollama or LM Studio. Keep everything on your machine - totally private.</p>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px; border-left: 4px solid #ed8936;">
+                <h3 style="margin: 0 0 10px 0; color: #2d3748; font-size: 1.2em;">💼 No Server Needed</h3>
+                <p style="margin: 0; color: #4a5568;">Runs entirely in your browser. No accounts, no registration, no background server. Just install and go.</p>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px; border-left: 4px solid #f56565;">
+                <h3 style="margin: 0 0 10px 0; color: #2d3748; font-size: 1.2em;">🔧 Works On Your Current Tab</h3>
+                <p style="margin: 0; color: #4a5568;">The agent sees exactly what you see. Ask questions, get summaries, or have it take action on the page.</p>
+            </div>
+        </div>
+    </div>
 
-  <dialog id="newPasswordDialog" class="story-viewer" aria-labelledby="newPasswordTitle">
-    <h2 id="newPasswordTitle">Choose a new password</h2>
-    <form id="newPasswordForm">
-      <label for="newPassword">New password (at least 6 characters)</label>
-      <input id="newPassword" type="password" minlength="6" autocomplete="new-password" required>
-      <button id="saveNewPasswordButton" type="submit">Save password</button>
-      <p id="newPasswordStatus" class="status" role="status"></p>
-    </form>
-  </dialog>
+    <!-- How It Works Section -->
+    <div style="background: white; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); padding: 35px 40px; margin-bottom: 30px;">
+        <h2 style="color: #1a202c; font-size: 1.8em; margin-top: 0; border-bottom: 3px solid #667eea; padding-bottom: 10px;">🔧 How It Works</h2>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; align-items: flex-start; gap: 15px;">
+                <div style="background: #667eea; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">1</div>
+                <div><strong style="font-size: 1.1em;">Open any webpage</strong> - news article, document, email, anything</div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 15px;">
+                <div style="background: #667eea; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">2</div>
+                <div><strong style="font-size: 1.1em;">Open browser-agent</strong> - it appears in Chrome's side panel</div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 15px;">
+                <div style="background: #667eea; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">3</div>
+                <div><strong style="font-size: 1.1em;">Ask or command</strong> - "summarize this article" or "help me fill this form"</div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 15px;">
+                <div style="background: #667eea; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">4</div>
+                <div><strong style="font-size: 1.1em;">Watch it work</strong> - the agent reads the page and responds instantly</div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Getting Started Section -->
+    <div style="background: white; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); padding: 35px 40px; margin-bottom: 30px;">
+        <h2 style="color: #1a202c; font-size: 1.8em; margin-top: 0; border-bottom: 3px solid #667eea; padding-bottom: 10px;">🚀 Getting Started</h2>
+        
+        <p style="font-size: 1.1em; margin-bottom: 25px;">Ready to supercharge your browsing? Here's how to get started in minutes:</p>
+        
+        <div style="background: #ebf4ff; padding: 25px; border-radius: 12px; border: 2px dashed #667eea; text-align: center; margin-bottom: 20px;">
+            <p style="font-size: 1.2em; margin: 0 0 15px 0; font-weight: bold;">📥 Step 1: Download browser-agent</p>
+            <a href="https://github.com/guycrespin/browser-agent" style="display: inline-block; padding: 14px 35px; background: #48bb78; color: white; font-size: 1.1em; font-weight: bold; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3); transition: transform 0.2s ease;">Visit this link to download the application</a>
+        </div>
+        
+        <div style="margin: 25px 0;">
+            <p style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">🛠️ Step 2: Add to Chrome</p>
+            <p style="color: #4a5568;">Once downloaded, open Chrome and go to <code style="background: #edf2f7; padding: 3px 8px; border-radius: 4px;">chrome://extensions</code>. Turn on "Developer mode" in the top right corner, then click "Load unpacked" and select the folder you downloaded.</p>
+        </div>
+        
+        <div style="margin: 25px 0;">
+            <p style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">🔑 Step 3: Connect Your AI Provider</p>
+            <p style="color: #4a5568;">In the extension settings, choose your provider:</p>
+            <ul>
+                <li style="padding: 5px 0;"><strong>Cloud options:</strong> Enter your API key for Claude, OpenAI, Gemini, or OpenRouter</li>
+                <li style="padding: 5px 0;"><strong>Local options:</strong> Select Ollama or LM Studio (make sure they're running on your computer)</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 25px 0;">
+            <p style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">🎉 Step 4: Start Using It!</p>
+            <p style="color: #4a5568;">Click the browser-agent icon in your toolbar to open the side panel. You're ready to go!</p>
+        </div>
+    </div>
 
-</body>
-</html>
+    <!-- FAQ Section -->
+    <div style="background: white; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); padding: 35px 40px; margin-bottom: 30px;">
+        <h2 style="color: #1a202c; font-size: 1.8em; margin-top: 0; border-bottom: 3px solid #667eea; padding-bottom: 10px;">❓ Frequently Asked Questions</h2>
+        
+        <div style="margin-bottom: 20px;">
+            <p style="font-weight: bold; font-size: 1.1em; margin-bottom: 5px;">Do I need to be a programmer to use this?</p>
+            <p style="color: #4a5568; margin: 0;">Absolutely not! We designed browser-agent for everyone. If you can use Chrome, you can use browser-agent. No coding knowledge needed.</p>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <p style="font-weight: bold; font-size: 1.1em; margin-bottom: 5px;">Is my data private?</p>
+            <p style="color: #4a5568; margin: 0;">Yes! Since there's no server involved, your data stays on your computer. It only goes to whatever AI provider you choose to connect.</p>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <p style="font-weight: bold; font-size: 1.1em; margin-bottom: 5px;">What does "MIT License" mean?</p>
+            <p style="color: #4a5568; margin: 0;">It means browser-agent is completely free to use, modify, and share. It's open source, so anyone can see how it works and contribute to making it better.</p>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <p style="font-weight: bold; font-size: 1.1em; margin-bottom: 5px;">Will this work on any computer?</p>
+            <p style="color: #4a5568; margin: 0;">browser-agent works on any computer that runs Google Chrome. That includes Windows, Mac, and Linux systems. It's lightweight and doesn't need much power.</p>
+        </div>
+    </div>
+
+    <!-- Security Section -->
+    <div style="background: white; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); padding: 35px 40px; margin-bottom: 30px;">
+        <h2 style="color: #1a202c; font-size: 1.8em; margin-top: 0; border-bottom: 3px solid #667eea; padding-bottom: 10px;">🔒 Privacy & Security</h2>
+        <p style="color: #4a5568; font-size: 1.1em;">Your security is our top priority. browser-agent:</p>
+        <ul style="list-style-type: disc; padding-left: 25px;">
+            <li style="padding
