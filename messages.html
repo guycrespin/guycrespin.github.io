@@ -80,7 +80,17 @@
             text-decoration: none;
         }
         .nav-link:hover, .nav-link.active { background: var(--received); color: var(--primary); }
-        .sidebar-bottom { display: grid; gap: 10px; margin-top: auto; }
+        .sidebar-bottom { display: grid; gap: 10px;         margin-top: auto;
+    }
+    .language-selector {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        color: var(--text);
+        font: inherit; }
         .theme-button, .logout-button, .icon-button {
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -161,6 +171,7 @@
             color: #fff;
             font-weight: bold;
         }
+        .avatar img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
         .conversation-info { flex: 1; min-width: 0; }
         .conversation-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
         .conversation-name { overflow: hidden; font-size: 14px; font-weight: bold; text-overflow: ellipsis; white-space: nowrap; }
@@ -206,11 +217,15 @@
         .message.received .bubble { border-bottom-left-radius: 5px; }
         .message-time { padding: 0 4px; color: var(--muted); font-size: 10px; }
         .message-media { display: block; width: min(100%, 420px); max-height: 360px; border-radius: 12px; object-fit: contain; }
+        .message-audio { display: block; width: min(100%, 360px); }
         .message-attachment { display: inline-flex; align-items: center; justify-content: center; padding: 0 8px; border: 1px solid var(--border); border-radius: 50%; background: var(--panel); color: var(--primary); font-size: 22px; cursor: pointer; }
         .message-attachment input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
         .chat-compose { padding: 13px 16px; border-top: 1px solid var(--border); }
         .compose-form { display: flex; align-items: flex-end; gap: 9px; }
         .compose-form textarea { min-width: 0; min-height: 46px; max-height: 130px; flex: 1; resize: none; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--input); color: var(--text); }
+        .voice-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .voice-controls button { padding: 8px 12px; border: 1px solid var(--border); border-radius: 18px; background: var(--panel); color: var(--primary); }
+        .voice-recording-status { min-height: 18px; margin: 6px 2px 0; color: var(--muted); font-size: 12px; }
         .send-button { padding: 13px 16px; border: 0; border-radius: 12px; background: var(--primary); color: white; font-weight: bold; }
         .notice { min-height: 18px; margin: 8px 2px 0; color: var(--muted); font-size: 12px; }
         .notice.error { color: #c62828; }
@@ -349,8 +364,8 @@
             .chat-person { flex: 1 1 70px; }
         }
     </style>
-  <script type="module" crossorigin src="/assets/messages-yEM7271v.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/preload-helper-B8tWKQ1F.js">
+  <script type="module" crossorigin src="/assets/messages-DJKinvZE.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/language-CntiGlAY.js">
 </head>
 <body>
     <main class="app">
@@ -362,36 +377,43 @@
                 <a class="nav-link" href="/#about">ⓘ About Campus Connect</a>
             </nav>
             <div class="sidebar-bottom">
-                <button id="theme-toggle" class="theme-button" type="button" aria-pressed="false">🌙 Night Mode</button>
-                <button id="logout-button" class="logout-button" type="button">Log out</button>
+                <label for="language-selector" hidden data-i18n="Language">Language</label>
+                <select id="language-selector" class="language-selector" aria-label="Language" data-i18n-aria-label="Language">
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="sw">Kiswahili</option>
+                    <option value="es">Español</option>
+                </select>
+                <button id="theme-toggle" class="theme-button" type="button" aria-pressed="false" data-i18n="🌙 Night Mode">🌙 Night Mode</button>
+                <button id="logout-button" class="logout-button" type="button" data-i18n="Log out">Log out</button>
             </div>
         </aside>
         <section class="messaging" id="messaging">
             <aside class="conversations" id="conversations-panel">
                 <header class="conversation-heading">
-                    <h1>Messages</h1>
-                    <p>Search members to start a private conversation.</p>
-                    <label for="conversation-search" hidden>Search members</label>
-                    <input id="conversation-search" class="search" type="search" placeholder="Search members..." autocomplete="off">
+                    <h1 data-i18n="Messages">Messages</h1>
+                    <p data-i18n="Search members by name, username, or university.">Search members by name, username, or university.</p>
+                    <label for="conversation-search" hidden data-i18n="Search members by name, username, or university.">Search members by name, username, or university.</label>
+                    <input id="conversation-search" class="search" type="search" placeholder="Search members and universities..." data-i18n-placeholder="Search members and universities..." autocomplete="off">
                     <div class="list-switcher" aria-label="Conversation type">
-                        <button type="button" id="showChatsButton" aria-pressed="true">Private chats</button>
-                        <button type="button" id="showCommunitiesButton" aria-pressed="false">Groups &amp; channels</button>
+                        <button type="button" id="showChatsButton" aria-pressed="true" data-i18n="Private chats">Private chats</button>
+                        <button type="button" id="showCommunitiesButton" aria-pressed="false" data-i18n="Groups & channels">Groups &amp; channels</button>
                     </div>
                 </header>
                 <div class="conversation-list" id="conversation-list" aria-label="Students and conversations"></div>
                 <section class="communities-panel hidden" id="communities-panel" aria-label="Groups and channels">
                     <form class="community-create" id="community-form">
-                        <strong>Create a group or channel</strong>
+                        <strong data-i18n="Create a group or channel">Create a group or channel</strong>
                         <label for="community-name" hidden>Name</label>
-                        <input id="community-name" maxlength="80" minlength="3" placeholder="Community name" required>
+                        <input id="community-name" maxlength="80" minlength="3" placeholder="Community name" data-i18n-placeholder="Community name" required>
                         <label for="community-description" hidden>Description</label>
-                        <textarea id="community-description" maxlength="500" placeholder="What is this community about?"></textarea>
+                        <textarea id="community-description" maxlength="500" placeholder="What is this community about?" data-i18n-placeholder="What is this community about?"></textarea>
                         <label for="community-kind" hidden>Type</label>
                         <select id="community-kind">
-                            <option value="group">Group chat — members can post</option>
-                            <option value="channel">Channel — owners publish</option>
+                            <option value="group" data-i18n="Group chat — members can post">Group chat — members can post</option>
+                            <option value="channel" data-i18n="Channel — owners publish">Channel — owners publish</option>
                         </select>
-                        <button type="submit" id="create-community-button">Create community</button>
+                        <button type="submit" id="create-community-button" data-i18n="Create community">Create community</button>
                         <p class="notice" id="community-notice" role="status"></p>
                     </form>
                     <div id="communities-list" aria-live="polite"></div>
@@ -402,50 +424,57 @@
                     <button id="back-button" class="icon-button back-button" type="button" aria-label="Back to students">←</button>
                     <div class="avatar" id="chat-avatar" aria-hidden="true">?</div>
                     <div class="chat-person">
-                        <h2 id="chat-name">Choose a student</h2>
-                        <p id="chat-status">Messages are private to you and the recipient.</p>
+                        <h2 id="chat-name" data-i18n="Choose a student">Choose a student</h2>
+                        <p id="chat-status" data-i18n="Messages are private to you and the recipient.">Messages are private to you and the recipient.</p>
                     </div>
                     <div class="call-actions" id="call-actions" aria-label="Call actions">
-                        <button id="voice-call-button" class="call-button" type="button" aria-label="Start voice call" title="Voice call" disabled>☎</button>
-                        <button id="video-call-button" class="call-button" type="button" aria-label="Start video call" title="Video call" disabled>▣</button>
+                        <button id="voice-call-button" class="call-button" type="button" aria-label="Start voice call" data-i18n-aria-label="Start voice call" title="Voice call" data-i18n-title="Voice call" disabled>☎</button>
+                        <button id="video-call-button" class="call-button" type="button" aria-label="Start video call" data-i18n-aria-label="Video call" title="Video call" data-i18n-title="Video call" disabled>▣</button>
                     </div>
-                    <button id="theme-toggle-mobile" class="icon-button" type="button" aria-label="Switch theme" aria-pressed="false">🌙</button>
+                    <button id="theme-toggle-mobile" class="icon-button" type="button" aria-label="Switch theme" data-i18n-aria-label="Switch theme" aria-pressed="false">🌙</button>
                 </header>
                 <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Messages">
-                    <div class="empty-state">Select a student to view or start a conversation.</div>
+                    <div class="empty-state" data-i18n="Select a student to view or start a conversation.">Select a student to view or start a conversation.</div>
                 </div>
                 <div class="chat-compose">
                     <form class="compose-form" id="message-form">
-                        <label class="message-attachment" for="message-media" title="Attach an image or video" aria-label="Attach an image or video">＋
-                            <input id="message-media" type="file" accept="image/*,video/*" disabled>
+                        <label class="message-attachment" for="message-media" title="Attach media or audio" data-i18n-title="Attach media or audio" aria-label="Attach media or audio" data-i18n-aria-label="Attach media or audio">＋
+                            <input id="message-media" type="file" accept="image/*,video/*,audio/*" disabled>
                         </label>
-                        <label for="message-input" hidden>Write a message</label>
-                        <textarea id="message-input" placeholder="Write a message..." rows="1" maxlength="5000" disabled></textarea>
-                        <button class="send-button" type="submit" id="send-button" disabled>Send ➤</button>
+                        <label for="message-input" hidden data-i18n="Write a message">Write a message</label>
+                        <textarea id="message-input" placeholder="Write a message..." data-i18n-placeholder="Write a message..." rows="1" maxlength="5000" disabled></textarea>
+                        <button class="send-button" type="submit" id="send-button" data-i18n="Send ➤" disabled>Send ➤</button>
                     </form>
+                    <div class="voice-controls" aria-label="Voice message">
+                        <button id="start-voice-recording" type="button" data-i18n="Record voice message" disabled>🎙 Record voice message</button>
+                        <button id="stop-voice-recording" type="button" data-i18n="Stop recording" hidden>Stop recording</button>
+                        <button id="send-voice-message" type="button" data-i18n="Send voice message" hidden>Send voice message</button>
+                        <button id="discard-voice-message" type="button" data-i18n="Discard recording" hidden>Discard</button>
+                    </div>
+                    <p id="voice-recording-status" class="voice-recording-status" role="status"></p>
                     <p class="notice" id="message-notice" role="status"></p>
                 </div>
             </section>
             <section id="calls-panel" class="calls-panel" aria-label="Start a call">
-                <h1>Calls</h1>
-                <p>Choose a member to start a voice or video call.</p>
-                <label for="calls-search" hidden>Search members</label>
-                <input id="calls-search" class="search" type="search" placeholder="Search members..." autocomplete="off">
+                <h1 data-i18n="Calls">Calls</h1>
+                <p data-i18n="Choose a member to start a voice or video call.">Choose a member to start a voice or video call.</p>
+                <label for="calls-search" hidden data-i18n="Search members by name, username, or university.">Search members by name, username, or university.</label>
+                <input id="calls-search" class="search" type="search" placeholder="Search members and universities..." data-i18n-placeholder="Search members and universities..." autocomplete="off">
                 <div id="call-directory" class="call-directory" aria-live="polite"></div>
                 <p class="notice" id="calls-notice" role="status"></p>
             </section>
         </section>
     </main>
     <dialog id="incoming-call-dialog" class="incoming-dialog" aria-labelledby="incoming-call-title">
-        <h2 id="incoming-call-title">Incoming call</h2>
+        <h2 id="incoming-call-title" data-i18n="Incoming call">Incoming call</h2>
         <p id="incoming-call-description"></p>
         <div class="incoming-actions">
-            <button id="accept-call-button" type="button">Accept</button>
-            <button id="decline-call-button" class="decline-call" type="button">Decline</button>
+            <button id="accept-call-button" type="button" data-i18n="Accept">Accept</button>
+            <button id="decline-call-button" class="decline-call" type="button" data-i18n="Decline">Decline</button>
         </div>
     </dialog>
     <dialog id="call-dialog" class="call-dialog" aria-labelledby="call-title">
-        <h2 id="call-title">Call</h2>
+        <h2 id="call-title" data-i18n="Call">Call</h2>
         <p id="call-state" class="notice" role="status"></p>
         <div class="call-videos">
             <video id="remote-video" class="remote-video" autoplay playsinline></video>
@@ -453,28 +482,29 @@
         </div>
         <audio id="remote-audio" autoplay></audio>
         <div class="call-controls">
-            <button id="toggle-mic-button" type="button">Mute microphone</button>
-            <button id="toggle-camera-button" type="button">Turn camera off</button>
-            <button id="end-call-button" class="end-call" type="button">End call</button>
+            <button id="toggle-mic-button" type="button" data-i18n="Mute microphone">Mute microphone</button>
+            <button id="toggle-camera-button" type="button" data-i18n="Turn camera off">Turn camera off</button>
+            <button id="end-call-button" class="end-call" type="button" data-i18n="End call">End call</button>
         </div>
     </dialog>
     <nav class="bottom-nav" aria-label="Main navigation">
         <a class="bottom-nav-link active" href="/messages.html" data-destination="chats" aria-current="page">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.8-3.2A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8 11.5h8M8 14.5h5"/></svg>
-            <span>Chats</span>
+            <span data-i18n="Chats">Chats</span>
         </a>
         <button class="bottom-nav-link" type="button" data-destination="calls" aria-pressed="false">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.5 10 7.2 8.4 9.5a15 15 0 0 0 6.1 6.1l2.3-1.6 3.7 2.8-.8 3.3a2 2 0 0 1-2.1 1.5A17.5 17.5 0 0 1 2.4 6.1a2 2 0 0 1 1.5-2.1l3.3-.5Z"/></svg>
-            <span>Calls</span>
+            <span data-i18n="Calls">Calls</span>
         </button>
         <a class="bottom-nav-link" href="/#stories" data-destination="updates">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.8"/><circle cx="12" cy="12" r="2.5"/></svg>
-            <span>Updates</span>
+            <span data-i18n="Updates">Updates</span>
         </a>
         <a class="bottom-nav-link" href="/#profile" data-destination="profile">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
-            <span>Profile</span>
+            <span data-i18n="Profile">Profile</span>
         </a>
     </nav>
+
 </body>
 </html>

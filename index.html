@@ -60,6 +60,16 @@
       font: inherit;
     }
 
+    .language-selector {
+      max-width: 150px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--background);
+      color: var(--text);
+      font: inherit;
+    }
+
     button {
       cursor: pointer;
       border: none;
@@ -308,26 +318,25 @@
 
     .reaction-button {
       padding: 7px 10px;
-      border: 1px solid var(--border);
-      background: var(--background);
-      color: var(--text);
-    }
-
-    .reaction-button[aria-pressed="true"] {
-      border-color: var(--blue);
-      background: color-mix(in srgb, var(--blue) 14%, var(--surface));
-    }
-
-    .reaction-button[data-reaction="❤️"] {
-      border-color: #f1a3a8;
+      border: 1px solid #f1a3a8;
       background: #fff0f1;
       color: #d92d3a;
     }
 
-    .reaction-button[data-reaction="❤️"][aria-pressed="true"] {
+    .reaction-button[aria-pressed="true"] {
       border-color: #d92d3a;
       background: #d92d3a;
       color: #fff;
+    }
+
+    #profileAvatarPreview {
+      display: block;
+      width: 96px;
+      height: 96px;
+      margin: 10px 0;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      object-fit: cover;
     }
 
     .notification-list {
@@ -352,6 +361,15 @@
 
     #profileDetails {
       line-height: 1.7;
+    }
+
+    #profileDetails .profile-avatar {
+      width: 64px;
+      height: 64px;
+      margin-right: 10px;
+      border-radius: 50%;
+      object-fit: cover;
+      vertical-align: middle;
     }
 
     .bottom-nav {
@@ -479,24 +497,31 @@
       #authSection { margin: 18px auto; }
     }
   </style>
-  <script type="module" crossorigin src="/assets/main-Bvrn3tPb.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/preload-helper-B8tWKQ1F.js">
+  <script type="module" crossorigin src="/assets/main-jFogFNQq.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/language-CntiGlAY.js">
 </head>
 
 <body>
   <header>
     <h1>Campus Connect</h1>
     <div style="display:flex; gap:8px;">
+      <label for="language-selector" hidden>Language</label>
+      <select id="language-selector" class="language-selector" aria-label="Language" data-i18n-aria-label="Language">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="sw">Kiswahili</option>
+        <option value="es">Español</option>
+      </select>
       <a href="/messages.html" class="secondary"
-         style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;">
+         style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;" data-i18n="💬 Messages">
         💬 Messages
       </a>
       <a href="#about" class="secondary"
-         style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;text-decoration:none;color:inherit;">
+         style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;text-decoration:none;color:inherit;" data-i18n="About">
         About
       </a>
-      <button id="themeButton" class="secondary" type="button">🌙 Theme</button>
-      <button id="logoutButton" class="hidden" type="button">Log out</button>
+      <button id="themeButton" class="secondary" type="button" data-i18n="🌙 Theme">🌙 Theme</button>
+      <button id="logoutButton" class="hidden" type="button" data-i18n="Log out">Log out</button>
     </div>
   </header>
 
@@ -504,116 +529,162 @@
 
     <!-- AUTHENTICATION -->
     <section id="authSection" class="card">
-      <h2>Welcome to Campus Connect 🎓</h2>
-      <p class="muted">Connect with people, wherever they study or work.</p>
+      <h2 data-i18n="Welcome to Campus Connect 🎓">Welcome to Campus Connect 🎓</h2>
+      <p class="muted" data-i18n="Connect with people, wherever they study or work.">Connect with people, wherever they study or work.</p>
 
       <div class="tabs">
-        <button id="showLoginButton" type="button">Log in</button>
-        <button id="showRegisterButton" class="secondary" type="button">
+        <button id="showLoginButton" type="button" data-i18n="Log in">Log in</button>
+        <button id="showRegisterButton" class="secondary" type="button" data-i18n="Register">
           Register
         </button>
       </div>
 
       <form id="loginForm">
-        <h3>Log in to your account</h3>
+        <h3 data-i18n="Log in to your account">Log in to your account</h3>
 
-        <label for="loginEmail">Email</label>
-        <input id="loginEmail" type="email" autocomplete="email" required>
+        <label for="loginMethod" data-i18n="Sign-in method">Sign-in method</label>
+        <select id="loginMethod">
+          <option value="email" data-i18n="Email and password">Email and password</option>
+          <option value="phone" data-i18n="Phone number and SMS code">Phone number and SMS code</option>
+        </select>
 
-        <label for="loginPassword">Password</label>
-        <input id="loginPassword" type="password"
-               autocomplete="current-password" required>
+        <div id="emailLoginFields">
+          <label for="loginEmail" data-i18n="Email">Email</label>
+          <input id="loginEmail" type="email" autocomplete="email" required>
+          <label for="loginPassword" data-i18n="Password">Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" required>
+        </div>
+        <div id="phoneLoginFields" class="hidden">
+          <label for="loginPhone" data-i18n="Phone number">Phone number</label>
+          <input id="loginPhone" type="tel" autocomplete="tel" inputmode="tel"
+                 placeholder="+12025550123" pattern="^\+[1-9]\d{7,14}$">
+          <p class="muted" data-i18n="Use international format, including the + country code.">Use international format, including the + country code.</p>
+        </div>
 
-        <button type="submit">Log in</button>
+        <button id="loginSubmitButton" type="submit" data-i18n="Log in">Log in</button>
         <p id="loginStatus" class="status" role="status"></p>
         <p class="auth-help">
-          <button id="forgotPasswordButton" type="button">Forgot your password?</button>
+          <button id="forgotPasswordButton" type="button" data-i18n="Forgot your password?">Forgot your password?</button>
         </p>
         <p class="auth-help hidden" id="resendConfirmation">
-          <button id="resendConfirmationButton" type="button">Resend confirmation email</button>
+          <button id="resendConfirmationButton" type="button" data-i18n="Resend confirmation email">Resend confirmation email</button>
         </p>
+      </form>
+      <form id="phoneLoginVerifyForm" class="hidden">
+        <h3 data-i18n="Verify your phone">Verify your phone</h3>
+        <p data-i18n="Enter the SMS verification code sent to your phone.">Enter the SMS verification code sent to your phone.</p>
+        <label for="phoneLoginCode" data-i18n="SMS verification code">SMS verification code</label>
+        <input id="phoneLoginCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" required>
+        <button type="submit" data-i18n="Verify and log in">Verify and log in</button>
+        <button id="resendPhoneLoginCode" class="secondary" type="button" data-i18n="Resend SMS code">Resend SMS code</button>
+        <p id="phoneLoginStatus" class="status" role="status"></p>
       </form>
 
       <form id="registerForm" class="hidden">
-        <h3>Create your account</h3>
+        <h3 data-i18n="Create your account">Create your account</h3>
+        <label for="registerMethod" data-i18n="Registration method">Registration method</label>
+        <select id="registerMethod">
+          <option value="email" data-i18n="Email and password">Email and password</option>
+          <option value="phone" data-i18n="Phone number and SMS code">Phone number and SMS code</option>
+        </select>
 
-        <label for="registerName">Full name</label>
+        <label for="registerName" data-i18n="Full name">Full name</label>
         <input id="registerName" type="text" maxlength="80"
                autocomplete="name" required>
 
-        <label for="registerUsername">Username</label>
+        <label for="registerUsername" data-i18n="Username">Username</label>
         <input id="registerUsername" type="text" minlength="3" maxlength="30"
                pattern="[A-Za-z0-9_]{3,30}"
                title="Use 3 to 30 letters, numbers and underscores."
                required>
 
-        <label for="registerEmail">Email</label>
-        <input id="registerEmail" type="email"
-               autocomplete="email" required>
-        <p class="muted">Any valid email address is welcome; no school email is required.</p>
+        <div id="emailRegistrationFields">
+          <label for="registerEmail" data-i18n="Email">Email</label>
+          <input id="registerEmail" type="email" autocomplete="email" required>
+          <p class="muted" data-i18n="Any valid email address is welcome; no school email is required.">Any valid email address is welcome; no school email is required.</p>
+        </div>
+        <div id="phoneRegistrationFields" class="hidden">
+          <label for="registerPhone" data-i18n="Phone number">Phone number</label>
+          <input id="registerPhone" type="tel" autocomplete="tel" inputmode="tel"
+                 placeholder="+12025550123" pattern="^\+[1-9]\d{7,14}$">
+          <p class="muted" data-i18n="Use international format, including the + country code.">Use international format, including the + country code.</p>
+        </div>
 
-        <label for="registerCourse">School, course, or organization (optional)</label>
+        <label for="registerCourse" data-i18n="University, school, course, or organization (optional)">University, school, course, or organization (optional)</label>
         <input id="registerCourse" type="text" maxlength="100">
 
-        <label for="registerPassword">Password (at least 6 characters)</label>
-        <input id="registerPassword" type="password"
-               minlength="6" autocomplete="new-password" required>
-        <p class="muted">Use at least 6 characters. Use an email address you can open to confirm your account if asked.</p>
+        <div id="registrationPasswordField">
+          <label for="registerPassword" data-i18n="Password (at least 6 characters)">Password (at least 6 characters)</label>
+          <input id="registerPassword" type="password" minlength="6" autocomplete="new-password" required>
+          <p class="muted" data-i18n="Use at least 6 characters. Use an email address you can open to confirm your account if asked.">Use at least 6 characters. Use an email address you can open to confirm your account if asked.</p>
+        </div>
 
-        <button type="submit">Create account</button>
+        <button type="submit" data-i18n="Create account">Create account</button>
         <p id="registerStatus" class="status" role="status"></p>
+      </form>
+      <form id="phoneRegistrationVerifyForm" class="hidden">
+        <h3 data-i18n="Verify your phone">Verify your phone</h3>
+        <p data-i18n="Enter the SMS verification code sent to your phone.">Enter the SMS verification code sent to your phone.</p>
+        <label for="phoneRegistrationCode" data-i18n="SMS verification code">SMS verification code</label>
+        <input id="phoneRegistrationCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" required>
+        <button type="submit" data-i18n="Verify and create account">Verify and create account</button>
+        <button id="resendPhoneRegistrationCode" class="secondary" type="button" data-i18n="Resend SMS code">Resend SMS code</button>
+        <p id="phoneRegistrationStatus" class="status" role="status"></p>
       </form>
     </section>
 
     <!-- APPLICATION -->
     <section id="appSection" class="hidden">
       <section id="profile" class="card">
-        <h2>Your profile</h2>
-        <div id="profileDetails">Loading your profile...</div>
+        <h2 data-i18n="Your profile">Your profile</h2>
+        <div id="profileDetails" data-i18n="Loading your profile...">Loading your profile...</div>
         <form id="profileForm">
-          <label for="profileName">Display name</label>
+          <label for="profileAvatarFile" data-i18n="Profile picture">Profile picture</label>
+          <img id="profileAvatarPreview" alt="Profile picture preview" hidden>
+          <input id="profileAvatarFile" type="file" accept="image/*">
+          <label for="profileName" data-i18n="Display name">Display name</label>
           <input id="profileName" type="text" maxlength="100" required>
-          <label for="profileBio">About you</label>
-          <textarea id="profileBio" maxlength="500" placeholder="A little about you..."></textarea>
-          <label for="profileCourse">School, course, or organization</label>
+          <label for="profileBio" data-i18n="About you">About you</label>
+          <textarea id="profileBio" maxlength="500" placeholder="A little about you..." data-i18n-placeholder="A little about you..."></textarea>
+          <label for="profileCourse" data-i18n="University, school, course, or organization">University, school, course, or organization</label>
           <input id="profileCourse" type="text" maxlength="120">
-          <button id="saveProfileButton" type="submit">Save profile</button>
+          <button id="saveProfileButton" type="submit" data-i18n="Save profile">Save profile</button>
         </form>
         <p id="profileStatus" class="status" role="status"></p>
       </section>
 
       <section id="notifications" class="card">
-        <h2>Notifications <span id="notificationCount" class="muted"></span></h2>
-        <button id="refreshNotificationsButton" class="secondary" type="button">Refresh notifications</button>
-        <button id="markNotificationsReadButton" class="secondary" type="button">Mark all as read</button>
+        <h2><span data-i18n="Notifications">Notifications</span> <span id="notificationCount" class="muted"></span></h2>
+        <button id="refreshNotificationsButton" class="secondary" type="button" data-i18n="Refresh notifications">Refresh notifications</button>
+        <button id="markNotificationsReadButton" class="secondary" type="button" data-i18n="Mark all as read">Mark all as read</button>
         <div id="notificationList" class="notification-list" aria-live="polite"></div>
         <p id="notificationStatus" class="status" role="status"></p>
       </section>
 
       <section id="stories" class="card">
-        <h2>Student status</h2>
-        <p class="muted">Share a text, photo, or video status. Statuses disappear after 24 hours.</p>
-        <button id="refreshStoriesButton" class="secondary" type="button">Refresh statuses</button>
+        <h2 data-i18n="Student status">Student status</h2>
+        <p class="muted" data-i18n="Share a text, photo, or video status. Statuses disappear after 24 hours.">Share a text, photo, or video status. Statuses disappear after 24 hours.</p>
+        <button id="refreshStoriesButton" class="secondary" type="button" data-i18n="Refresh statuses">Refresh statuses</button>
         <form id="storyForm">
-          <label for="storyText">Your status</label>
-          <textarea id="storyText" maxlength="500" placeholder="What are you up to?"></textarea>
-          <label for="storyMedia">Add a photo or video (optional)</label>
+          <label for="storyText" data-i18n="Your status">Your status</label>
+          <textarea id="storyText" maxlength="500" placeholder="What are you up to?" data-i18n-placeholder="What are you up to?"></textarea>
+          <label for="storyMedia" data-i18n="Add a photo or video (optional)">Add a photo or video (optional)</label>
           <input id="storyMedia" type="file" accept="image/*,video/*">
           <p class="muted">Videos can be up to 10 minutes and 500 MiB. Photos can be up to 50 MiB.</p>
-          <button id="publishStoryButton" type="submit">Share status</button>
+          <button id="publishStoryButton" type="submit" data-i18n="Share status">Share status</button>
           <p id="storyStatus" class="status" role="status"></p>
         </form>
         <div id="storiesList" class="stories-list" aria-label="Student statuses"></div>
       </section>
 
       <section class="card">
-        <h2>Create a post</h2>
+        <h2 data-i18n="Create a post">Create a post</h2>
         <form id="postForm">
-          <label for="postText">What's happening on campus?</label>
+          <label for="postText" data-i18n="What's happening on campus?">What's happening on campus?</label>
           <textarea id="postText" maxlength="5000"
-                    placeholder="Share something with your classmates..."></textarea>
+                    placeholder="Share something with your classmates..." data-i18n-placeholder="Share something with your classmates..."></textarea>
 
-          <label for="mediaUpload">Add a picture or video (optional)</label>
+          <label for="mediaUpload" data-i18n="Add a picture or video (optional)">Add a picture or video (optional)</label>
           <input id="mediaUpload" type="file"
                  accept="image/*,video/*">
 
@@ -694,6 +765,7 @@
       <p id="newPasswordStatus" class="status" role="status"></p>
     </form>
   </dialog>
-
+
+
 </body>
 </html>
