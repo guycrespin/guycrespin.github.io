@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1877f2">
+  <title>Campus Connect</title>
+
+  <style>
+    :root {
+      --blue: #1877f2;
+      --background: #f0f2f5;
+      --surface: #ffffff;
+      --text: #1c1e21;
+      --muted: #65676b;
+      --border: #dddfe2;
+    }
+
+    body.dark {
+      --background: #18191a;
+      --surface: #242526;
+      --text: #e4e6eb;
+      --muted: #b0b3b8;
+      --border: #3e4042;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 5%;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 23px;
+    }
+
+    button, input, textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 14px;
+      background: var(--blue);
+      color: white;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .secondary {
+      background: var(--background);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+      margin: 6px 0 12px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .container {
+      width: min(700px, 94%);
+      margin: 22px auto;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .tabs button {
+      flex: 1;
+    }
+
+    .status {
+      white-space: pre-wrap;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .error {
+      color: #e53935;
+    }
+
+    .success {
+      color: #16803c;
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .post-author {
+      font-weight: bold;
+    }
+
+    .post-content {
+      overflow-wrap: anywhere;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .post-image, .post-video {
+      display: block;
+      max-width: 100%;
+      max-height: 450px;
+      margin-top: 12px;
+      border-radius: 8px;
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .post-actions button {
+      flex: 1;
+    }
+
+    .comment {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .comment-form {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .comment-form input {
+      margin: 0;
+    }
+
+    .comment-form button {
+      white-space: nowrap;
+    }
+
+    #profileDetails {
+      line-height: 1.7;
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 12px;
+      }
+
+      header h1 {
+        font-size: 19px;
+      }
+
+      .container {
+        width: 96%;
+      }
+
+      .card {
+        padding: 13px;
+      }
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/main-BErxFlg_.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/preload-helper-B8tWKQ1F.js">
+</head>
+
+<body>
+  <header>
+    <h1>Campus Connect</h1>
+    <div style="display:flex; gap:8px;">
+      <a href="/messages.html" class="secondary"
+         style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;">
+        💬 Messages
+      </a>
+      <button id="themeButton" class="secondary" type="button">🌙 Theme</button>
+      <button id="logoutButton" class="hidden" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- AUTHENTICATION -->
+    <section id="authSection" class="card">
+      <h2>Welcome to Campus Connect 🎓</h2>
+      <p class="muted">Connect with students at your university.</p>
+
+      <div class="tabs">
+        <button id="showLoginButton" type="button">Log in</button>
+        <button id="showRegisterButton" class="secondary" type="button">
+          Register
+        </button>
+      </div>
+
+      <form id="loginForm">
+        <h3>Log in to your account</h3>
+
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" autocomplete="email" required>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password"
+               autocomplete="current-password" required>
+
+        <button type="submit">Log in</button>
+        <p id="loginStatus" class="status" role="status"></p>
+      </form>
+
+      <form id="registerForm" class="hidden">
+        <h3>Create your student account</h3>
+
+        <label for="registerName">Full name</label>
+        <input id="registerName" type="text" maxlength="80"
+               autocomplete="name" required>
+
+        <label for="registerUsername">Username</label>
+        <input id="registerUsername" type="text" minlength="3" maxlength="30"
+               pattern="[A-Za-z0-9_]{3,30}"
+               title="Use 3 to 30 letters, numbers and underscores."
+               required>
+
+        <label for="registerEmail">Email</label>
+        <input id="registerEmail" type="email"
+               autocomplete="email" required>
+
+        <label for="registerCourse">Course</label>
+        <input id="registerCourse" type="text" maxlength="100" required>
+
+        <label for="registerPassword">Password (at least 6 characters)</label>
+        <input id="registerPassword" type="password"
+               minlength="6" autocomplete="new-password" required>
+
+        <button type="submit">Create account</button>
+        <p id="registerStatus" class="status" role="status"></p>
+      </form>
+    </section>
+
+    <!-- APPLICATION -->
+    <section id="appSection" class="hidden">
+      <section class="card">
+        <h2>Your profile</h2>
+        <div id="profileDetails">Loading your profile...</div>
+        <p id="profileStatus" class="status" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>Create a post</h2>
+        <form id="postForm">
+          <label for="postText">What's happening on campus?</label>
+          <textarea id="postText" maxlength="5000"
+                    placeholder="Share something with your classmates..."></textarea>
+
+          <label for="mediaUpload">Add a picture or video (optional)</label>
+          <input id="mediaUpload" type="file"
+                 accept="image/*,video/*">
+
+          <p class="muted">
+            Text posts work immediately. Media uploads require a configured
+            Supabase Storage bucket named campus-media.
+          </p>
+
+          <button id="publishButton" type="submit">Publish post</button>
+          <p id="postStatus" class="status" role="status"></p>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Student feed</h2>
+        <button id="refreshFeedButton" class="secondary" type="button">
+          Refresh feed
+        </button>
+        <p id="feedStatus" class="status" role="status"></p>
+        <div id="feed"></div>
+      </section>
+    </section>
+
+  </main>
+
+</body>
+</html>
