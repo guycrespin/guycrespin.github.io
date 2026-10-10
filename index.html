@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#1877f2">
+  <link rel="icon" type="image/png" href="/icons/icon-192.png" />
   <title>Campus Connect</title>
 
   <style>
@@ -30,6 +31,7 @@
 
     body {
       margin: 0;
+      padding-bottom: 76px;
       background: var(--background);
       color: var(--text);
       font-family: Arial, sans-serif;
@@ -137,12 +139,106 @@
       font-size: 14px;
     }
 
+    .auth-help {
+      margin: 8px 0 0;
+      font-size: 14px;
+    }
+
+    .auth-help button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      text-decoration: underline;
+    }
+
+    .auth-help button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
     .error {
       color: #e53935;
     }
 
     .success {
       color: #16803c;
+    }
+
+    .stories-list {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 8px 2px 14px;
+    }
+
+    .story-card {
+      display: grid;
+      width: 86px;
+      flex: 0 0 86px;
+      justify-items: center;
+      gap: 7px;
+      padding: 0;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .story-preview {
+      display: grid;
+      width: 72px;
+      height: 72px;
+      place-items: center;
+      overflow: hidden;
+      border: 3px solid #25d366;
+      border-radius: 50%;
+      background: #e8f7ef;
+      color: #128c54;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .story-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .story-label {
+      width: 100%;
+      overflow: hidden;
+      font-size: 12px;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .story-viewer {
+      width: min(520px, 94vw);
+      max-height: 90vh;
+      padding: 20px;
+      border: 0;
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .story-viewer::backdrop {
+      background: rgb(0 0 0 / 75%);
+    }
+
+    .story-media {
+      display: block;
+      width: 100%;
+      max-height: 65vh;
+      margin: 12px 0;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+    .story-viewer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
     }
 
     .post-header {
@@ -207,6 +303,103 @@
       line-height: 1.7;
     }
 
+    .bottom-nav {
+      position: fixed;
+      z-index: 20;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      min-height: 70px;
+      padding: 6px max(8px, env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right));
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: 0 -4px 18px rgb(20 25 40 / 7%);
+    }
+
+    .bottom-nav a {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bottom-nav a:hover,
+    .bottom-nav a.active {
+      color: #1877f2;
+    }
+
+    .bottom-nav svg {
+      width: 23px;
+      height: 23px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Telegram-inspired blue surfaces and rounded controls. */
+    :root {
+      --blue: #3390ec;
+      --background: #eaf0f5;
+      --surface: #ffffff;
+      --text: #182533;
+      --muted: #71808d;
+      --border: #e1e8ee;
+    }
+
+    body.dark {
+      --blue: #5aa9f8;
+      --background: #0e1621;
+      --surface: #17212b;
+      --text: #edf4f8;
+      --muted: #91a2b2;
+      --border: #263442;
+    }
+
+    body {
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background-image: radial-gradient(rgb(89 130 160 / 5%) .75px, transparent .75px);
+      background-size: 18px 18px;
+    }
+
+    header {
+      padding: 13px max(16px, calc((100% - 1080px) / 2));
+      box-shadow: 0 2px 10px rgb(28 48 66 / 5%);
+    }
+
+    header h1 { letter-spacing: -.6px; }
+    button { border-radius: 10px; transition: filter .16s ease, transform .16s ease; }
+    button:hover:not(:disabled) { filter: brightness(.97); }
+    .secondary, input, textarea { border-radius: 12px; }
+    input, textarea { padding: 13px 14px; }
+    input:focus, textarea:focus { border-color: var(--blue); outline: 3px solid rgb(51 144 236 / 14%); }
+    .container { width: min(720px, 94%); margin-top: 28px; }
+    .card { border-color: var(--border); border-radius: 16px; box-shadow: 0 4px 18px rgb(28 48 66 / 5%); }
+    #authSection { max-width: 580px; margin: 32px auto; padding: clamp(20px, 5vw, 38px); }
+    #authSection > h2 { margin-top: 0; font-size: clamp(24px, 4vw, 32px); letter-spacing: -.8px; }
+    #loginForm h3, #registerForm h3 { margin-top: 22px; }
+    .tabs { padding: 4px; border-radius: 12px; background: var(--background); }
+    .tabs button { border-radius: 9px; }
+    .tabs button.secondary { border-color: transparent; background: transparent; }
+    .tabs button:not(.secondary) { box-shadow: 0 2px 6px rgb(28 48 66 / 12%); }
+    .story-preview { border-color: var(--blue); background: #eaf4ff; color: #2582d8; }
+    .story-card { border-radius: 12px; }
+    .story-card:hover { background: color-mix(in srgb, var(--blue) 7%, var(--surface)); }
+    .post-actions { border-top-color: var(--border); }
+    .bottom-nav { backdrop-filter: blur(14px); background: color-mix(in srgb, var(--surface) 94%, transparent); }
+    .bottom-nav a.active { background: color-mix(in srgb, var(--blue) 10%, var(--surface)); }
+
     @media (max-width: 480px) {
       header {
         padding: 12px;
@@ -223,9 +416,11 @@
       .card {
         padding: 13px;
       }
+
+      #authSection { margin: 18px auto; }
     }
   </style>
-  <script type="module" crossorigin src="/assets/main-CmYljvm3.js"></script>
+  <script type="module" crossorigin src="/assets/main-BpyNV6MF.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/preload-helper-B8tWKQ1F.js">
 </head>
 
@@ -247,7 +442,7 @@
     <!-- AUTHENTICATION -->
     <section id="authSection" class="card">
       <h2>Welcome to Campus Connect 🎓</h2>
-      <p class="muted">Connect with students at your university.</p>
+      <p class="muted">Connect with people, wherever they study or work.</p>
 
       <div class="tabs">
         <button id="showLoginButton" type="button">Log in</button>
@@ -268,10 +463,16 @@
 
         <button type="submit">Log in</button>
         <p id="loginStatus" class="status" role="status"></p>
+        <p class="auth-help">
+          <button id="forgotPasswordButton" type="button">Forgot your password?</button>
+        </p>
+        <p class="auth-help hidden" id="resendConfirmation">
+          <button id="resendConfirmationButton" type="button">Resend confirmation email</button>
+        </p>
       </form>
 
       <form id="registerForm" class="hidden">
-        <h3>Create your student account</h3>
+        <h3>Create your account</h3>
 
         <label for="registerName">Full name</label>
         <input id="registerName" type="text" maxlength="80"
@@ -286,13 +487,15 @@
         <label for="registerEmail">Email</label>
         <input id="registerEmail" type="email"
                autocomplete="email" required>
+        <p class="muted">Any valid email address is welcome; no school email is required.</p>
 
-        <label for="registerCourse">Course</label>
-        <input id="registerCourse" type="text" maxlength="100" required>
+        <label for="registerCourse">School, course, or organization (optional)</label>
+        <input id="registerCourse" type="text" maxlength="100">
 
         <label for="registerPassword">Password (at least 6 characters)</label>
         <input id="registerPassword" type="password"
                minlength="6" autocomplete="new-password" required>
+        <p class="muted">Use at least 6 characters. Use an email address you can open to confirm your account if asked.</p>
 
         <button type="submit">Create account</button>
         <p id="registerStatus" class="status" role="status"></p>
@@ -301,10 +504,26 @@
 
     <!-- APPLICATION -->
     <section id="appSection" class="hidden">
-      <section class="card">
+      <section id="profile" class="card">
         <h2>Your profile</h2>
         <div id="profileDetails">Loading your profile...</div>
         <p id="profileStatus" class="status" role="status"></p>
+      </section>
+
+      <section id="stories" class="card">
+        <h2>Student status</h2>
+        <p class="muted">Share a text, photo, or video status. Statuses disappear after 24 hours.</p>
+        <button id="refreshStoriesButton" class="secondary" type="button">Refresh statuses</button>
+        <form id="storyForm">
+          <label for="storyText">Your status</label>
+          <textarea id="storyText" maxlength="500" placeholder="What are you up to?"></textarea>
+          <label for="storyMedia">Add a photo or video (optional)</label>
+          <input id="storyMedia" type="file" accept="image/*,video/*">
+          <p class="muted">Videos can be up to 10 minutes and 500 MiB. Photos can be up to 50 MiB.</p>
+          <button id="publishStoryButton" type="submit">Share status</button>
+          <p id="storyStatus" class="status" role="status"></p>
+        </form>
+        <div id="storiesList" class="stories-list" aria-label="Student statuses"></div>
       </section>
 
       <section class="card">
@@ -319,8 +538,8 @@
                  accept="image/*,video/*">
 
           <p class="muted">
-            Pictures and videos up to 50 MB can be attached. Uploaded media is
-            publicly viewable, so only share files you are comfortable making public.
+            Videos can be up to 10 minutes and 500 MiB; pictures can be up to 50 MiB.
+            Uploaded media is publicly viewable, so only share files you are comfortable making public.
           </p>
 
           <button id="publishButton" type="submit">Publish post</button>
@@ -339,6 +558,56 @@
     </section>
 
   </main>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="/messages.html" data-destination="chats">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.8-3.2A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8 11.5h8M8 14.5h5"/></svg>
+      <span>Chats</span>
+    </a>
+    <a href="/messages.html#calls" data-destination="calls">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.5 10 7.2 8.4 9.5a15 15 0 0 0 6.1 6.1l2.3-1.6 3.7 2.8-.8 3.3a2 2 0 0 1-2.1 1.5A17.5 17.5 0 0 1 2.4 6.1a2 2 0 0 1 1.5-2.1l3.3-.5Z"/></svg>
+      <span>Calls</span>
+    </a>
+    <a href="/#stories" data-destination="updates">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.8"/><circle cx="12" cy="12" r="2.5"/></svg>
+      <span>Updates</span>
+    </a>
+    <a href="/#profile" data-destination="profile">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <dialog id="storyViewer" class="story-viewer" aria-label="Student status">
+    <div id="storyViewerContent"></div>
+    <div class="story-viewer-actions">
+      <button id="previousStoryButton" class="secondary" type="button">Previous</button>
+      <button id="closeStoryButton" type="button">Close</button>
+      <button id="nextStoryButton" class="secondary" type="button">Next</button>
+    </div>
+  </dialog>
+
+  <dialog id="passwordResetDialog" class="story-viewer" aria-labelledby="passwordResetTitle">
+    <h2 id="passwordResetTitle">Reset your password</h2>
+    <p class="muted">We’ll email you a secure link to choose a new password.</p>
+    <form id="passwordResetForm">
+      <label for="resetEmail">Email</label>
+      <input id="resetEmail" type="email" autocomplete="email" required>
+      <button id="sendResetButton" type="submit">Send reset link</button>
+      <button id="closeResetDialogButton" class="secondary" type="button">Cancel</button>
+      <p id="resetStatus" class="status" role="status"></p>
+    </form>
+  </dialog>
+
+  <dialog id="newPasswordDialog" class="story-viewer" aria-labelledby="newPasswordTitle">
+    <h2 id="newPasswordTitle">Choose a new password</h2>
+    <form id="newPasswordForm">
+      <label for="newPassword">New password (at least 6 characters)</label>
+      <input id="newPassword" type="password" minlength="6" autocomplete="new-password" required>
+      <button id="saveNewPasswordButton" type="submit">Save password</button>
+      <p id="newPasswordStatus" class="status" role="status"></p>
+    </form>
+  </dialog>
 
 </body>
 </html>
