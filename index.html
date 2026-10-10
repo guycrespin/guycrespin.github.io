@@ -299,6 +299,57 @@
       white-space: nowrap;
     }
 
+    .reaction-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .reaction-button {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      background: var(--background);
+      color: var(--text);
+    }
+
+    .reaction-button[aria-pressed="true"] {
+      border-color: var(--blue);
+      background: color-mix(in srgb, var(--blue) 14%, var(--surface));
+    }
+
+    .reaction-button[data-reaction="❤️"] {
+      border-color: #f1a3a8;
+      background: #fff0f1;
+      color: #d92d3a;
+    }
+
+    .reaction-button[data-reaction="❤️"][aria-pressed="true"] {
+      border-color: #d92d3a;
+      background: #d92d3a;
+      color: #fff;
+    }
+
+    .notification-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .notification-item {
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--background);
+    }
+
+    .notification-item.unread {
+      border-left: 3px solid var(--blue);
+    }
+
+    .owner-about {
+      line-height: 1.6;
+    }
+
     #profileDetails {
       line-height: 1.7;
     }
@@ -306,16 +357,19 @@
     .bottom-nav {
       position: fixed;
       z-index: 20;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      left: 50%;
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      min-height: 70px;
-      padding: 6px max(8px, env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right));
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-      box-shadow: 0 -4px 18px rgb(20 25 40 / 7%);
+      width: min(560px, calc(100% - 24px));
+      min-height: 66px;
+      padding: 6px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      box-shadow: 0 8px 28px rgb(20 40 60 / 18%);
+      backdrop-filter: blur(18px);
     }
 
     .bottom-nav a {
@@ -325,7 +379,7 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
-      border-radius: 12px;
+      border-radius: 999px;
       color: var(--muted);
       font-size: 11px;
       font-weight: 600;
@@ -379,6 +433,7 @@
     }
 
     header h1 { letter-spacing: -.6px; }
+    header > div { flex-wrap: wrap; justify-content: flex-end; }
     button { border-radius: 10px; transition: filter .16s ease, transform .16s ease; }
     button:hover:not(:disabled) { filter: brightness(.97); }
     .secondary, input, textarea { border-radius: 12px; }
@@ -398,9 +453,11 @@
     .story-card:hover { background: color-mix(in srgb, var(--blue) 7%, var(--surface)); }
     .post-actions { border-top-color: var(--border); }
     .bottom-nav { backdrop-filter: blur(14px); background: color-mix(in srgb, var(--surface) 94%, transparent); }
-    .bottom-nav a.active { background: color-mix(in srgb, var(--blue) 10%, var(--surface)); }
+    .bottom-nav a { transition: background-color .16s ease, color .16s ease, transform .16s ease; }
+    .bottom-nav a.active { background: color-mix(in srgb, var(--blue) 12%, var(--surface)); }
 
     @media (max-width: 480px) {
+      body { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
       header {
         padding: 12px;
       }
@@ -408,6 +465,8 @@
       header h1 {
         font-size: 19px;
       }
+      header > div { gap: 5px !important; }
+      header > div > a, header > div > button { padding: 8px 9px !important; font-size: 12px; }
 
       .container {
         width: 96%;
@@ -420,7 +479,7 @@
       #authSection { margin: 18px auto; }
     }
   </style>
-  <script type="module" crossorigin src="/assets/main-BpyNV6MF.js"></script>
+  <script type="module" crossorigin src="/assets/main-Bvrn3tPb.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/preload-helper-B8tWKQ1F.js">
 </head>
 
@@ -431,6 +490,10 @@
       <a href="/messages.html" class="secondary"
          style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;">
         💬 Messages
+      </a>
+      <a href="#about" class="secondary"
+         style="display:inline-flex;align-items:center;padding:10px 14px;border-radius:7px;text-decoration:none;color:inherit;">
+        About
       </a>
       <button id="themeButton" class="secondary" type="button">🌙 Theme</button>
       <button id="logoutButton" class="hidden" type="button">Log out</button>
@@ -507,7 +570,24 @@
       <section id="profile" class="card">
         <h2>Your profile</h2>
         <div id="profileDetails">Loading your profile...</div>
+        <form id="profileForm">
+          <label for="profileName">Display name</label>
+          <input id="profileName" type="text" maxlength="100" required>
+          <label for="profileBio">About you</label>
+          <textarea id="profileBio" maxlength="500" placeholder="A little about you..."></textarea>
+          <label for="profileCourse">School, course, or organization</label>
+          <input id="profileCourse" type="text" maxlength="120">
+          <button id="saveProfileButton" type="submit">Save profile</button>
+        </form>
         <p id="profileStatus" class="status" role="status"></p>
+      </section>
+
+      <section id="notifications" class="card">
+        <h2>Notifications <span id="notificationCount" class="muted"></span></h2>
+        <button id="refreshNotificationsButton" class="secondary" type="button">Refresh notifications</button>
+        <button id="markNotificationsReadButton" class="secondary" type="button">Mark all as read</button>
+        <div id="notificationList" class="notification-list" aria-live="polite"></div>
+        <p id="notificationStatus" class="status" role="status"></p>
       </section>
 
       <section id="stories" class="card">
@@ -555,6 +635,12 @@
         <p id="feedStatus" class="status" role="status"></p>
         <div id="feed"></div>
       </section>
+    </section>
+
+    <section id="about" class="card owner-about">
+      <h2>About Campus Connect</h2>
+      <p>Campus Connect is a community app for sharing updates, photos and videos, discovering people, and keeping in touch through private or community chats and calls.</p>
+      <p><strong>App owner:</strong> Josh Chimal...Akim</p>
     </section>
 
   </main>

@@ -55,8 +55,8 @@
             grid-template-columns: 220px minmax(0, 1fr);
             gap: 18px;
             width: min(1500px, 100%);
-            height: calc(100vh - 78px);
-            height: calc(100dvh - 78px);
+            height: calc(100vh - 96px);
+            height: calc(100dvh - 96px);
             min-height: 520px;
             margin: auto;
             padding: 18px;
@@ -112,6 +112,22 @@
         .conversation-heading h1 { margin: 0 0 7px; font-size: 24px; }
         .conversation-heading p, .chat-person p { color: var(--muted); font-size: 13px; line-height: 1.5; }
         .conversation-heading p { margin: 0 0 14px; }
+        .list-switcher { display: flex; gap: 6px; margin-top: 12px; }
+        .list-switcher button { flex: 1; padding: 9px 8px; border: 1px solid var(--border); border-radius: 10px; background: var(--input); color: var(--text); }
+        .list-switcher button[aria-pressed="true"] { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, var(--panel)); color: var(--primary); }
+        .communities-panel { overflow-y: auto; min-height: 0; flex: 1; padding: 12px; }
+        .community-create { display: grid; gap: 8px; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 13px; background: var(--input); }
+        .community-create input, .community-create textarea, .community-create select { width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--border); border-radius: 9px; background: var(--panel); color: var(--text); }
+        .community-create textarea { min-height: 70px; resize: vertical; }
+        .community-create button, .community-card button { padding: 9px 12px; border: 0; border-radius: 9px; background: var(--primary); color: #fff; }
+        .community-card { display: grid; gap: 8px; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); border-radius: 13px; background: var(--panel); }
+        .community-card h3 { margin: 0; font-size: 14px; }
+        .community-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+        .community-meta { color: var(--muted); font-size: 11px; text-transform: capitalize; }
+        .community-actions { display: flex; align-items: center; gap: 8px; }
+        .community-card button { justify-self: start; }
+        .community-card .community-leave { border: 1px solid var(--border); background: var(--panel); color: var(--muted); }
+        .hidden { display: none !important; }
         .search {
             width: 100%;
             padding: 12px;
@@ -189,6 +205,9 @@
         .message.sent .bubble { border-bottom-right-radius: 5px; background: var(--primary); color: #fff; }
         .message.received .bubble { border-bottom-left-radius: 5px; }
         .message-time { padding: 0 4px; color: var(--muted); font-size: 10px; }
+        .message-media { display: block; width: min(100%, 420px); max-height: 360px; border-radius: 12px; object-fit: contain; }
+        .message-attachment { display: inline-flex; align-items: center; justify-content: center; padding: 0 8px; border: 1px solid var(--border); border-radius: 50%; background: var(--panel); color: var(--primary); font-size: 22px; cursor: pointer; }
+        .message-attachment input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
         .chat-compose { padding: 13px 16px; border-top: 1px solid var(--border); }
         .compose-form { display: flex; align-items: flex-end; gap: 9px; }
         .compose-form textarea { min-width: 0; min-height: 46px; max-height: 130px; flex: 1; resize: none; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--input); color: var(--text); }
@@ -199,16 +218,19 @@
         .bottom-nav {
             position: fixed;
             z-index: 20;
-            right: 0;
-            bottom: 0;
-            left: 0;
+            left: 50%;
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
-            min-height: 70px;
-            padding: 6px max(8px, env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right));
-            border-top: 1px solid var(--border);
-            background: var(--panel);
-            box-shadow: 0 -4px 18px rgb(20 25 40 / 7%);
+            width: min(560px, calc(100% - 24px));
+            min-height: 66px;
+            padding: 6px;
+            bottom: calc(12px + env(safe-area-inset-bottom));
+            transform: translateX(-50%);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--panel) 92%, transparent);
+            box-shadow: 0 8px 28px rgb(20 40 60 / 18%);
+            backdrop-filter: blur(18px);
         }
         .bottom-nav-link {
             display: flex;
@@ -218,7 +240,7 @@
             justify-content: center;
             gap: 4px;
             border: 0;
-            border-radius: 12px;
+            border-radius: 999px;
             background: transparent;
             color: var(--muted);
             font-size: 11px;
@@ -293,7 +315,7 @@
         .call-button, .icon-button { border-radius: 50%; color: var(--primary); }
         .call-contact { border-color: var(--border); border-radius: 13px; background: var(--panel); }
         .call-contact-actions button { border-radius: 20px; color: var(--primary); }
-        .bottom-nav { border-top-color: var(--border); box-shadow: 0 -3px 16px rgb(28 48 66 / 6%); }
+        .bottom-nav { border-color: var(--border); box-shadow: 0 8px 28px rgb(28 48 66 / 14%); }
         .bottom-nav-link { transition: background-color .16s ease, color .16s ease; }
         .bottom-nav-link.active { background: color-mix(in srgb, var(--primary) 9%, var(--panel)); }
 
@@ -303,7 +325,7 @@
             .conversations { background: var(--panel); }
             .conversation-heading { padding-top: max(18px, env(safe-area-inset-top)); }
             .chat-header { padding-top: max(10px, env(safe-area-inset-top)); }
-            .app { display: block; height: calc(100dvh - 70px - env(safe-area-inset-bottom)); min-height: 0; padding: 0; }
+            .app { display: block; height: calc(100dvh - 96px - env(safe-area-inset-bottom)); min-height: 0; padding: 0; }
             .sidebar { display: none; }
             .messaging { display: block; height: 100%; border: 0; border-radius: 0; }
             .conversations { height: 100%; border-right: 0; }
@@ -327,7 +349,7 @@
             .chat-person { flex: 1 1 70px; }
         }
     </style>
-  <script type="module" crossorigin src="/assets/messages-iyeZ7YRq.js"></script>
+  <script type="module" crossorigin src="/assets/messages-yEM7271v.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/preload-helper-B8tWKQ1F.js">
 </head>
 <body>
@@ -337,6 +359,7 @@
             <nav aria-label="Main navigation">
                 <a class="nav-link" href="/">🏠 Home</a>
                 <a class="nav-link active" href="/messages.html" aria-current="page">💬 Messages</a>
+                <a class="nav-link" href="/#about">ⓘ About Campus Connect</a>
             </nav>
             <div class="sidebar-bottom">
                 <button id="theme-toggle" class="theme-button" type="button" aria-pressed="false">🌙 Night Mode</button>
@@ -350,8 +373,29 @@
                     <p>Search members to start a private conversation.</p>
                     <label for="conversation-search" hidden>Search members</label>
                     <input id="conversation-search" class="search" type="search" placeholder="Search members..." autocomplete="off">
+                    <div class="list-switcher" aria-label="Conversation type">
+                        <button type="button" id="showChatsButton" aria-pressed="true">Private chats</button>
+                        <button type="button" id="showCommunitiesButton" aria-pressed="false">Groups &amp; channels</button>
+                    </div>
                 </header>
                 <div class="conversation-list" id="conversation-list" aria-label="Students and conversations"></div>
+                <section class="communities-panel hidden" id="communities-panel" aria-label="Groups and channels">
+                    <form class="community-create" id="community-form">
+                        <strong>Create a group or channel</strong>
+                        <label for="community-name" hidden>Name</label>
+                        <input id="community-name" maxlength="80" minlength="3" placeholder="Community name" required>
+                        <label for="community-description" hidden>Description</label>
+                        <textarea id="community-description" maxlength="500" placeholder="What is this community about?"></textarea>
+                        <label for="community-kind" hidden>Type</label>
+                        <select id="community-kind">
+                            <option value="group">Group chat — members can post</option>
+                            <option value="channel">Channel — owners publish</option>
+                        </select>
+                        <button type="submit" id="create-community-button">Create community</button>
+                        <p class="notice" id="community-notice" role="status"></p>
+                    </form>
+                    <div id="communities-list" aria-live="polite"></div>
+                </section>
             </aside>
             <section class="chat" aria-label="Private chat">
                 <header class="chat-header">
@@ -361,7 +405,7 @@
                         <h2 id="chat-name">Choose a student</h2>
                         <p id="chat-status">Messages are private to you and the recipient.</p>
                     </div>
-                    <div class="call-actions" aria-label="Call actions">
+                    <div class="call-actions" id="call-actions" aria-label="Call actions">
                         <button id="voice-call-button" class="call-button" type="button" aria-label="Start voice call" title="Voice call" disabled>☎</button>
                         <button id="video-call-button" class="call-button" type="button" aria-label="Start video call" title="Video call" disabled>▣</button>
                     </div>
@@ -372,8 +416,11 @@
                 </div>
                 <div class="chat-compose">
                     <form class="compose-form" id="message-form">
+                        <label class="message-attachment" for="message-media" title="Attach an image or video" aria-label="Attach an image or video">＋
+                            <input id="message-media" type="file" accept="image/*,video/*" disabled>
+                        </label>
                         <label for="message-input" hidden>Write a message</label>
-                        <textarea id="message-input" placeholder="Write a message..." rows="1" maxlength="5000" disabled required></textarea>
+                        <textarea id="message-input" placeholder="Write a message..." rows="1" maxlength="5000" disabled></textarea>
                         <button class="send-button" type="submit" id="send-button" disabled>Send ➤</button>
                     </form>
                     <p class="notice" id="message-notice" role="status"></p>
