@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#6658e8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Campus Connect">
@@ -346,7 +346,13 @@
             .conversations { background: var(--panel); }
             .conversation-heading { padding-top: max(18px, env(safe-area-inset-top)); }
             .chat-header { padding-top: max(10px, env(safe-area-inset-top)); }
-            .app { display: block; height: calc(100dvh - 96px - env(safe-area-inset-bottom)); min-height: 0; padding: 0; }
+            .app {
+                display: block;
+                height: calc(100vh - 96px - env(safe-area-inset-bottom, 0px));
+                height: calc(100dvh - 96px - env(safe-area-inset-bottom, 0px));
+                min-height: 0;
+                padding: 0;
+            }
             .sidebar { display: none; }
             .messaging { display: block; height: 100%; border: 0; border-radius: 0; }
             .conversations { height: 100%; border-right: 0; }
